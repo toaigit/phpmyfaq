@@ -1,0 +1,17 @@
+Basic steps
+  docker pull postgres
+  docker pull phpmyfaq/phpmyfaq
+  mkdir /BASE/faq/roothtml
+  mkdir /BASE/faq/data
+  cp init.db /BASE/faq
+
+download phpmyfaq tar ball (ie., phpmyfaq-3.0.2.tar.gz)
+
+cd /BASE/faq/roothtml
+tar -xzvf /path-to/phpmyfaq-3.0.2.tar.gz
+mv phpmyfaq FAQ
+
+Update the Dockerfile to match your BASE path
+docker-compose -f phpmyfaq-compose.yml up -d
+
+Go to http://your-host:1080/FAQ  

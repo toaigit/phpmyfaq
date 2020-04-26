@@ -1,0 +1,1 @@
+docker-compose -f phpmyfaq-compose.yml up -d

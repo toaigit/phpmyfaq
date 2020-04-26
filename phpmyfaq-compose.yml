@@ -1,0 +1,35 @@
+# docker-compose for phpmyfaq 
+version: '3.1'
+
+services:
+
+  myfaqdb:
+    image: postgres
+    container_name: phpmyfaqdb
+    restart: always
+    environment:
+       - POSTGRES_PASSWORD=mysecretpasswd
+    volumes:
+      - BASE/faq/data:/var/lib/postgresql/data
+      - BASE/faq/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  myfaq:
+    image: phpmyfaq/phpmyfaq
+    container_name:  myphpfaqweb
+    restart: always
+    environment:
+      - PMF_DISABLE_HTACCESS=""
+      - PMF_TIMEZONE="America/Los_Angeles"
+      - PMF_ENABLE_UPLOADS="On"
+      - PMF_MEMORY_LIMIT="128M"
+      - PMF_UPLOAD_MAX_FILESIZE=64M
+      - PMF_POST_MAX_SIZE=64M
+      - PHP_LOG_ERRORS="On"
+      - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED & E_STRICT" # Production Value: E_ALL & ~E_DEPRECATED & ~E_STRICT
+    ports:
+      - '1080:80'
+    volumes:
+      - BASE/faq/roothtml:/var/www/html
+      - BASE/faq/logs:/var/log
+    depends_on:
+      - myfaqdb
